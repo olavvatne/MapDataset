@@ -1,14 +1,35 @@
 __author__ = 'olav'
 
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+
+from qgis.core import *
+import qgis.utils
+from qgis.utils import iface
+from qgis.gui import *
+
+import sys
+
 import os
+import os.path
+import shutil
+import math
 #TODO: Program for QGIS to write vector tiles to disk.
 #TODO: Takes a folder as input with files having filename scheme defined in tiles.
 #Use bbox extracted from file name and write image vector image to disk as a raster image.
 #Use python code
 
 dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/f')
-output_dir = 'C:/Users/olav/git/MapDataset/vector'
+output_dir = 'C:/Users/olav/git/MapDataset/vector/Test/'
+
+mapRenderer = iface.mapCanvas().mapRenderer()
 QDir().mkpath(output_dir)
+
+def delay( millisecondsToWait ):
+    dieTime = QTime().currentTime().addMSecs( millisecondsToWait )
+    while ( QTime.currentTime() < dieTime ):
+        QCoreApplication.processEvents( QEventLoop().AllEvents, 100 )
+        
 def get_name(file):
     EXTENSION = -4
     name = file.split('-')[1]
@@ -34,7 +55,7 @@ def render(bbox, output_dir):
     settings.setLayers(mapRenderer.layerSet())
     settings.setFlag(QgsMapSettings.DrawLabeling, True)
     settings.setMapUnits(QGis.Meters)
-    settings.setBackgroundColor(QColor(127, 127, 127, 0))
+    #settings.setBackgroundColor(QColor(127, 127, 127, 0))
     
     tileRect = QgsRectangle(lat_min, lon_min, lat_max, lon_max)
     settings.setExtent(tileRect)
@@ -44,18 +65,16 @@ def render(bbox, output_dir):
     job.waitForFinished()
     delay(10)
     image = job.renderedImage()
-    print(image)
-    print(output_dir)
     QgsVectorLayer
-    image.save(output_dir + '/test3.png', "PNG")
-    sys.stdout.write("*")
+    image.save(output_dir, "PNG")
+    #sys.stdout.write("*")
     
 for file in dir:
     if not file.endswith('.jpg'):
         continue
     name = get_name(file)
     bbox = get_bbox(name)
-    render(bbox, output_dir)
-    raise Exception("NO MORE")
+    render(bbox, output_dir + file[:-4] + '.png')
+    #raise Exception("NO MORE")
     
     
