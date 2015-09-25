@@ -14,13 +14,19 @@ import os
 import os.path
 import shutil
 import math
-#TODO: Program for QGIS to write vector tiles to disk.
-#TODO: Takes a folder as input with files having filename scheme defined in tiles.
-#Use bbox extracted from file name and write image vector image to disk as a raster image.
-#Use python code
 
-dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/f')
-output_dir = 'C:/Users/olav/git/MapDataset/vector/Test/'
+'''
+Reads a folder under tiles, where each file have it's bounding box in the filename.
+The bbox is extracted from filename and a tile is rendered from QGIS.
+
+The goals of the tile_writer is to create label data for the image data.
+For example road vectors shown as black lines in the images etc.
+
+'''
+
+dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/Oslo2')
+output_dir = 'C:/Users/olav/git/MapDataset/vector/Oslo2/'
+elements = len(dir)
 
 mapRenderer = iface.mapCanvas().mapRenderer()
 QDir().mkpath(output_dir)
@@ -53,7 +59,7 @@ def render(bbox, output_dir):
     settings.setDestinationCrs(QgsCoordinateReferenceSystem('EPSG:32632'))
     settings.setOutputSize(QSize(width, height))
     settings.setLayers(mapRenderer.layerSet())
-    settings.setFlag(QgsMapSettings.DrawLabeling, True)
+    #settings.setFlag(QgsMapSettings.DrawLabeling, True)
     settings.setMapUnits(QGis.Meters)
     #settings.setBackgroundColor(QColor(127, 127, 127, 0))
     
@@ -67,14 +73,15 @@ def render(bbox, output_dir):
     image = job.renderedImage()
     QgsVectorLayer
     image.save(output_dir, "PNG")
-    #sys.stdout.write("*")
     
-for file in dir:
+for idx, file in enumerate(dir):
     if not file.endswith('.jpg'):
         continue
+    if idx % 50 == 0:
+        print('progress:', str(idx), '/', str(elements))
     name = get_name(file)
     bbox = get_bbox(name)
     render(bbox, output_dir + file[:-4] + '.png')
-    #raise Exception("NO MORE")
+print('Finished')
     
     
