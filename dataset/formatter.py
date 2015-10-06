@@ -1,32 +1,29 @@
-__author__ = 'olav'
-'''
-Creator loads both dataset and vector folder and, run through
-all of them. Combines data X with label y into a dataset structure.
-The structure will be similar to the way mnist.pkl.gz is structured.
+__author__ = 'Olav'
 
-The goal of the creator is to reduce the amount of computation and work that has to
-be done by the CNN module.
 '''
+Simpler version of the creator. The pickle files became very large.
+Formatter will instead process all tiles by putting them into a single folder, which can be loaded
+and processed by CNN
+'''
+
 import os, sys
-import numpy as np
 import random
-from PIL import Image
-import _pickle as pickle
+import shutil
+import image_slicer
+#python -m pip install image_slicer
+
 
 dataset_dir = '../tiles/'
 vector_dir = '../vector/'
-output_file ='test'
+output_folder ='dataset1'
 
 class DatasetCreator:
     ARRAY_FORMAT = 'float32'
 
-    def __init__(self, images, vector, testset=0.1, validationset=0.1):
+    def __init__(self, images, vector, output):
         self.images_dir = images
         self.vector_dir = vector
-
-        self.p_test = testset
-        self.p_valid = validationset
-        self.p_train = 1 - testset - validationset
+        self.output_dir = output
 
     def create(self):
         print('Transforming dataset and vector into suitable dataset representation might take a few minutes depending'
@@ -41,6 +38,10 @@ class DatasetCreator:
             raise Exception('Number of tile and vector folders does not match. '
                             'Are you sure you have generated vectors for every tile folder?')
 
+        os.makedirs(self.output_dir)
+        os.makedirs(self.output_dir + '/data')
+        os.makedirs(self.output_dir + '/label')
+        index = 0
         examples = []
         for i in range(len(tile_folders)):
             if(tile_folders[i] != vector_folders[i]):
@@ -60,49 +61,32 @@ class DatasetCreator:
             tiles.sort()
             vectors.sort()
             print('==============Processing ', tile_folders[i], '======================')
+            slicing = True
 
             #TODO: Correct format for CNN. Still not sure if the images should be a 1D matrix of some sort. Who knows
             for j in range(len(tiles)):
-                label = self.create_image_label(os.path.join(vector_path, vectors[j]))
-                image = self.create_image_data(os.path.join(tile_path, tiles[j]))
-                examples.append((image, label))
+                tile_file = self.output_dir + '/data/' + str(index) + '.png'
+                vector_file = self.output_dir + '/label/' + str(index) + '.png'
+
+                #Copies to output directory and split each tile into 64x64 chunks.
+                self.create_copy(os.path.join(vector_path, vectors[j]), vector_file )
+                self.create_copy(os.path.join(tile_path, tiles[j]), tile_file )
+                if slicing:
+                    self.split(tile_file)
+                    self.split(vector_file)
+
+                index = index +1
 
                 if j % 200 == 0:
                     print("Tile: ", j, '/', len(tiles))
 
-        dataset = self._split_dataset(examples)
-        return dataset
 
+    def create_copy(self, path, output):
+        shutil.copy(path, output)
 
-    def _split_dataset(self, examples):
-        random.shuffle(examples) #Shuffle all tiles to avoid similar tiles being lumped together
-        nr = len(examples)
-        nr_train = int(nr*self.p_train)
-        nr_valid = int(nr*self.p_valid)
-
-        train = self._split_label_data(examples[:nr_train])
-        valid = self._split_label_data(examples[nr_train:nr_train + nr_valid])
-        test = self._split_label_data(examples[nr_train + nr_valid:])
-        return (train, valid, test)
-
-    def _split_label_data(self, examples):
-        data = [i[0] for i in examples]
-        label =[i[1] for i in examples]
-        return (data, label)
-
-    def create_image_data(self, path):
-        image = Image.open(path, 'r')
-        arr =  np.asarray(image, dtype=DatasetCreator.ARRAY_FORMAT) / 255
-        arr = np.rollaxis(arr, 2, 0)
-        image.close()
-        return arr
-
-    def create_image_label(self, path):
-        image = Image.open(path, 'r')
-        label = np.invert(np.asarray(image))
-        label = np.divide(label, 255 , dtype=DatasetCreator.ARRAY_FORMAT)
-        image.close()
-        return label
+    def split(self, path):
+        image_slicer.slice(path, 16)
+        os.remove(path)
 
     def get_image_files(self, path):
         included_extenstions = ['jpg','png'];
@@ -115,12 +99,7 @@ class DatasetCreator:
                 folders.append(file)
         return folders
 
-creator = DatasetCreator(dataset_dir, vector_dir)
-dataset = creator.create()
-print('Final dataset size: ', len(dataset[0][0]) + len(dataset[1][0]) + len(dataset[2][0]))
-print('Train set size:', len(dataset[0][0]),' Validation set size:', len(dataset[1][0]), ' Test set size:', len(dataset[2][0]))
-print('Will pickle and gzipping dataset. This might take a while!')
+creator = DatasetCreator(dataset_dir, vector_dir, output_folder)
+creator.create()
+print("Job done")
 
-f =  open('tiles.pkl ', 'wb')
-pickle.dump(dataset, f)
-f.close()
