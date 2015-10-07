@@ -4,22 +4,36 @@ import os, sys
 from PIL import Image
 import msvcrt as m
 
-dataset ='../dataset/dataset1'
+tiles_dir ='../tiles/dataset/'
+vector_dir ='../vector/dataset/'
 
 def get_image_files(path):
     included_extenstions = ['jpg','png'];
     return [fn for fn in os.listdir(path) if any([fn.endswith(ext) for ext in included_extenstions])]
 
-images = get_image_files(dataset + '/data')
-label = get_image_files(dataset + '/label')
+def white_to_transparent(img):
+    pixdata = img.load()
+    print(pixdata)
+    for y in range(img.size[1]):
+        for x in range(img.size[0]):
+            if pixdata[x, y] == (255, 255, 255, 255):
+                pixdata[x, y] = (255, 255, 255, 0)
+
+images = get_image_files(tiles_dir)
+label = get_image_files(vector_dir)
 
 for i in range(len(images)):
-    background = Image.open(dataset + '/data/' + images[i])
-    overlay = Image.open(dataset + '/label/' + label[i])
+    background = Image.open(tiles_dir + images[i])
+    overlay = Image.open(vector_dir + label[i])
 
+    print(images[i])
+
+    print(label[i])
+    background.show()
+    overlay.show()
     background = background.convert("RGBA")
     overlay = overlay.convert("RGBA")
-
-    new_img = Image.blend(background, overlay, 0.5)
-    new_img.show()
+    white_to_transparent(overlay)
+    background.paste(overlay, (0, 0), overlay)
+    background.show()
     input('Proceed?')

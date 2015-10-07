@@ -23,9 +23,9 @@ The goals of the tile_writer is to create label data for the image data.
 For example road vectors shown as black lines in the images etc.
 
 '''
-
-dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/Oslo2')
-output_dir = 'C:/Users/olav/git/MapDataset/vector/Oslo2/'
+from random import shuffle
+dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/dataset')
+output_dir = 'C:/Users/olav/git/MapDataset/vector/dataset/'
 elements = len(dir)
 
 mapRenderer = iface.mapCanvas().mapRenderer()
@@ -48,8 +48,9 @@ def get_bbox(name):
 
 def render(bbox, output_dir):
     lat_min, lon_min, lat_max, lon_max = bbox
-    width = 256
-    height = 256
+    print(lat_min, lon_min, lat_max, lon_max)
+    width = 1536
+    height = 1536
     image = QImage(width, height, QImage.Format_ARGB32_Premultiplied)
                 
     settings = QgsMapSettings()
