@@ -39,7 +39,7 @@ class DatasetCreator:
                             'Are you sure you have generated vectors for every tile folder?')
 
         os.makedirs(self.output_dir)
-        os.makedirs(self.output_dir + '/data')
+        os.makedirs(self.output_dir + '/result')
         os.makedirs(self.output_dir + '/label')
         index = 0
         examples = []
@@ -65,7 +65,7 @@ class DatasetCreator:
 
             #TODO: Correct format for CNN. Still not sure if the images should be a 1D matrix of some sort. Who knows
             for j in range(len(tiles)):
-                tile_file = self.output_dir + '/data/' + str(index) + '.png'
+                tile_file = self.output_dir + '/result/' + str(index) + '.png'
                 vector_file = self.output_dir + '/label/' + str(index) + '.png'
 
                 #Copies to output directory and split each tile into 64x64 chunks.

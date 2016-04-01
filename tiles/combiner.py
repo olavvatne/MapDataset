@@ -8,8 +8,8 @@ import os, sys
 import numpy as np
 from PIL import Image
 import math
-imagedir_dir = '../tiles/Trondheim/'
-imagesave_dir = '../tiles/dataset'
+imagedir_dir = '../result/Trondheim/'
+imagesave_dir = '../result/dataset'
 class TileCombiner:
     ARRAY_FORMAT = 'float32'
 

@@ -1,7 +1,7 @@
 __author__ = 'olav'
 '''
 Creator loads both dataset and vector folder and, run through
-all of them. Combines data X with label y into a dataset structure.
+all of them. Combines result X with label y into a dataset structure.
 The structure will be similar to the way mnist.pkl.gz is structured.
 
 The goal of the creator is to reduce the amount of computation and work that has to

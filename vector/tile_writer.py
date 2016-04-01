@@ -19,7 +19,7 @@ import math
 Reads a folder under tiles, where each file have it's bounding box in the filename.
 The bbox is extracted from filename and a tile is rendered from QGIS.
 
-The goals of the tile_writer is to create label data for the image data.
+The goals of the tile_writer is to create label result for the image result.
 For example road vectors shown as black lines in the images etc.
 
 '''
