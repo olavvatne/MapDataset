@@ -8,8 +8,9 @@ import os, sys
 import numpy as np
 from PIL import Image
 import math
-imagedir_dir = '../result/Trondheim/'
+imagedir_dir = '../result/Randaberg/'
 imagesave_dir = '../result/dataset'
+
 class TileCombiner:
     ARRAY_FORMAT = 'float32'
 
@@ -68,7 +69,7 @@ class TileCombiner:
         return None
 
     def _file_to_coords(self, file):
-        temp = file[:-4].split('-')[1]
+        temp = file[:-4].split('--')[1]
         coords = [float(x) for x in temp.split(',')]
         return coords
 
@@ -79,13 +80,17 @@ class TileCombiner:
         miny = float('inf')
         maxy = 0
 
+        #Build image array from patches.
         arr = np.zeros((6*256, 6*256, 3), dtype=np.uint8)
         for i in range(len(subarr)):
             row = subarr[i]
+
             for j in range(len(row)):
                 name, data = subarr[i][j]
                 coords = self._file_to_coords(name)
-                arr[(len(row)-j-1)*256:  (len(row)-j)*256,  (i)*256: (i+1)*256, :] = data[:,:, :]
+                #print(len(row)-j-1, len(row)-j, i, i+1 )
+                #Each patch replace certain spot in image.
+                arr[(len(row)-j-1)*256:  (len(row)-j)*256,  (len(subarr)-i-1)*256: (len(subarr)-i)*256, :] = data[:,:, :]
 
                 if minx > coords[0]:
                     minx = coords[0]

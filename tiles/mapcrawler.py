@@ -1,8 +1,7 @@
 import requests
 from PIL import Image
 from io import BytesIO
-import math
-import time
+import time, os, math
 
 
 class MapCrawler(object):
@@ -23,6 +22,8 @@ class MapCrawler(object):
 
     def set_dir(self, output_directory):
         self.output = output_directory
+        if not os.path.isdir(self.output):
+            os.makedirs(self.output)
 
     def start(self):
         if not self.base or not self.output:
@@ -47,7 +48,7 @@ class MapCrawler(object):
                 print("i: ", i , " j: ", j)
                 self._request_and_store(self.params, index)
                 index = index +1
-                time.sleep(0.5)
+                time.sleep(0.2)
 
 
 
