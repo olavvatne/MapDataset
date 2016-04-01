@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 import math
 imagedir_dir = '../result/Randaberg/'
-imagesave_dir = '../result/dataset'
+imagesave_dir = '../result/dataset/tiles'
 
 class TileCombiner:
     ARRAY_FORMAT = 'float32'
@@ -69,7 +69,9 @@ class TileCombiner:
         return None
 
     def _file_to_coords(self, file):
-        temp = file[:-4].split('--')[1]
+        #Index seperated by a '-'
+        idx = file.index('-')
+        temp = file[idx+1:-4]
         coords = [float(x) for x in temp.split(',')]
         return coords
 
@@ -90,16 +92,17 @@ class TileCombiner:
                 coords = self._file_to_coords(name)
                 #print(len(row)-j-1, len(row)-j, i, i+1 )
                 #Each patch replace certain spot in image.
-                arr[(len(row)-j-1)*256:  (len(row)-j)*256,  (len(subarr)-i-1)*256: (len(subarr)-i)*256, :] = data[:,:, :]
-
-                if minx > coords[0]:
+                arr[(len(row)-j-1)*256:  (len(row)-j)*256,  (i)*256: (i+1)*256, :] = data[:,:, :]
+                print(coords)
+                if minx > abs(coords[0]):
                     minx = coords[0]
-                if maxx < coords[2]:
+                if maxx < abs(coords[2]):
                     maxx = coords[2]
-                if miny > coords[1]:
+                if miny > abs(coords[1]):
                     miny = coords[1]
-                if maxy < coords[3]:
+                if maxy < abs(coords[3]):
                     maxy = coords[3]
+        #print(minx, maxx, miny, maxy)
         self.save_image([minx,miny, maxx, maxy], arr)
 
     def get_image_files(self, path):

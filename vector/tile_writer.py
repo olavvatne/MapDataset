@@ -24,8 +24,8 @@ For example road vectors shown as black lines in the images etc.
 
 '''
 from random import shuffle
-dir = os.listdir('C:/Users/olav/git/MapDataset/tiles/dataset')
-output_dir = 'C:/Users/olav/git/MapDataset/vector/dataset/'
+dir = os.listdir('C:/Users/olav/git/MapDataset/result/dataset/tiles')
+output_dir = 'C:/Users/olav/git/MapDataset/result/dataset/vector/'
 elements = len(dir)
 
 mapRenderer = iface.mapCanvas().mapRenderer()
