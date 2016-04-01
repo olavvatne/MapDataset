@@ -5,6 +5,9 @@ All tools needed to construct a dataset based on map data.
 - Execute tiles/aerial.py to get tiles inside configurable bounding box
 - Combine patches into bigger images using tiles/combiner.py
 - Import vector/tile_write.py script into QGIS, and generate labels for each image. This step required QGIS and map data.
+..1.In QGIS open norway.qgs file.
+..2. Open Python console by 'Plugins -> Python console'
+
 - Use dataset/formatter.py to organize images and labels into a dataset, with test, validation and training set.
 
 ## Dependencies
