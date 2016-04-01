@@ -38,8 +38,8 @@ def delay( millisecondsToWait ):
         
 def get_name(file):
     EXTENSION = -4
-    name = file.split('-')[1]
-    name = name[:EXTENSION]
+    idx = file.index('-')
+    name = file[idx+1:EXTENSION]
     return name
 
 def get_bbox(name):
@@ -57,7 +57,7 @@ def render(bbox, output_dir):
     settings.setCrsTransformEnabled(True)
     settings.setOutputDpi(109.0)
     settings.setOutputImageFormat(QImage.Format_ARGB32_Premultiplied)
-    settings.setDestinationCrs(QgsCoordinateReferenceSystem('EPSG:32632'))
+    settings.setDestinationCrs(QgsCoordinateReferenceSystem('EPSG:32633'))
     settings.setOutputSize(QSize(width, height))
     settings.setLayers(mapRenderer.layerSet())
     #settings.setFlag(QgsMapSettings.DrawLabeling, True)
