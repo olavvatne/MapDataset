@@ -8,7 +8,7 @@ import os, sys
 import numpy as np
 from PIL import Image
 import math
-imagedir_dir = '../result/Randaberg/'
+imagedir_dir = '../result/Hamar/'
 imagesave_dir = '../result/dataset/tiles'
 
 class TileCombiner:
