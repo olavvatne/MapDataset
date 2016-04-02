@@ -12,7 +12,8 @@ All tools needed to construct a dataset based on map data.
     5. Change **dir** and **output_dir** of vector/tile_writer.py script.
     6. Click save button and run script.
 
-- Use dataset/formatter.py to organize images and labels into a dataset, with test, validation and training set.
+- Use dataset/formatter.py to organize images and labels into a dataset. Images tiles are given new name and randomized
+- Test, validation and training folder can be created manually. 
 
 ## Dependencies
 * [Numpy](http://www.numpy.org/)
