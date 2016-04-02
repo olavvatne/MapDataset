@@ -5,7 +5,7 @@ All tools needed to construct a dataset based on map data.
 - Execute tiles/aerial.py to get tiles inside configurable bounding box
 - Combine patches into bigger images using tiles/combiner.py
 - Import vector/tile_write.py script into QGIS, and generate labels for each image. This step required QGIS and map data.
-    1. Download N50 map data from [Kartverket]{http://kartverket.no/Kart/Gratis-kartdata/Last-ned-norgeskartet-som-database/} in postgres format. Guide can be found [here](http://kartverket.no/Kart/Gratis-kartdata/Vegvisar-til-gratis-kartdata/Brukerveiledning-for-kartdata/)
+    1. Download N50 map data from [Kartverket](http://kartverket.no/Kart/Gratis-kartdata/Last-ned-norgeskartet-som-database/) in postgres format. Guide can be found [here](http://kartverket.no/Kart/Gratis-kartdata/Vegvisar-til-gratis-kartdata/Brukerveiledning-for-kartdata/)
     2. In QGIS open norway.qgs file.
     3. Open Python console by **Plugins -> Python console**.
     4. Right click in console and press **Show Editor**.
