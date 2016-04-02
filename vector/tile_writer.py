@@ -72,6 +72,7 @@ def render(bbox, output_dir):
     job.waitForFinished()
     delay(10)
     image = job.renderedImage()
+    image.invertPixels()
     QgsVectorLayer
     image.save(output_dir, "PNG")
     

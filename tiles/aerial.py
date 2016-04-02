@@ -7,12 +7,12 @@ Retrieves all image tiles inside bbox from url.
 The wms service often needs url parameters which can be added under url_params.
 '''
 #SETTINGS
-output_dir = '../result/Eidsfjord'
+output_dir = '../result/Moirana'
 step = 169.25 #Also actual meters in image.
 index = (0, 0, 0) #Index, tilex, tiley. If program stops working during run.
 #Left east coordinate,  down north coordinate, right east coodinate,  up north coordinate
 bbox = [
-  63460.5,6723535.5,68199.5,6730474.75
+457982.25,7352130,470676,7360254
 ]
 #BBOX = Lower left corner, upper right corner
 resolution = 256
